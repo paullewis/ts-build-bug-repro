@@ -1,0 +1,24 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_swc//swc:defs.bzl", "swc_transpiler")
+load("@bazel_skylib//lib:partial.bzl", "partial")
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+
+ts_project(
+    name = "src",
+    srcs = [
+        "src.ts",
+    ],
+    declaration = True,
+    transpiler = partial.make(
+        swc_transpiler,
+    ),
+    tsconfig = "//:tsconfig",
+    deps = [
+        "//:node_modules/@types/node",
+    ],
+)
+
+js_binary(
+    name = "src-bin",
+    entry_point = ":src.js",
+)
